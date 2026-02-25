@@ -1,0 +1,110 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}All Applications{% endblock %}
+{% block page_title %}All Applications{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <p style="color: var(--text-secondary); font-size: 0.875rem;">Review and manage all candidate applications</p>
+</div>
+
+<!-- Filter Bar -->
+<form method="get" class="filter-bar">
+    <input type="text" name="q" placeholder="Search candidate or job..." value="{{ query }}"
+        style="flex: 1; min-width: 180px;">
+    <select name="status">
+        <option value="">All Statuses</option>
+        {% for val, label in status_choices %}
+        <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" name="skills" placeholder="Skills filter..." value="{{ skills_filter }}" style="width: 140px;">
+    <input type="number" name="experience" placeholder="Min. Exp (yrs)" value="{{ experience_filter }}"
+        style="width: 130px;" min="0">
+    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-filter"></i> Filter</button>
+    {% if query or status_filter or skills_filter or experience_filter %}
+    <a href="{% url 'applications:all_applications' %}" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i>
+        Clear</a>
+    {% endif %}
+</form>
+
+<div class="card fade-in-up">
+    <div class="card-body no-padding">
+        {% if applications %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Candidate</th>
+                        <th>Job</th>
+                        <th>Skills</th>
+                        <th>Exp.</th>
+                        <th>Status</th>
+                        <th>Applied</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applications %}
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div
+                                    style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; flex-shrink: 0;">
+                                    {{ app.candidate.first_name|first|default:"?" }}
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">{{
+                                        app.candidate.get_full_name|default:app.candidate.username }}</div>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">{{ app.candidate.email }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ app.job.title }}</td>
+                        <td>
+                            {% if app.candidate.candidate_profile %}
+                            {% for skill in app.candidate.candidate_profile.skills_list|slice:":2" %}
+                            <span class="skill-tag">{{ skill }}</span>
+                            {% endfor %}
+                            {% if app.candidate.candidate_profile.skills_list|length > 2 %}
+                            <span class="skill-tag" style="opacity: 0.6;">+{{
+                                app.candidate.candidate_profile.skills_list|length|add:"-2" }}</span>
+                            {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if app.candidate.candidate_profile %}
+                            {{ app.candidate.candidate_profile.experience_years }}y
+                            {% else %}—{% endif %}
+                        </td>
+                        <td><span class="status-badge {{ app.status }}">{{ app.get_status_display }}</span></td>
+                        <td>{{ app.applied_at|date:"M d" }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'applications:candidate_detail' app.candidate.pk %}"
+                                    class="btn btn-sm btn-secondary" title="Profile">
+                                    <i class="fas fa-user"></i>
+                                </a>
+                                <a href="{% url 'applications:update_status' app.pk %}" class="btn btn-sm btn-primary"
+                                    title="Update">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📬</div>
+            <h3>No Applications Found</h3>
+            <p>{% if query or status_filter or skills_filter %}Try adjusting your filters.{% else %}No applications have
+                been submitted yet.{% endif %}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

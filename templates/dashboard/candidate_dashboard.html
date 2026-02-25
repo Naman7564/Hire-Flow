@@ -1,0 +1,190 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}Candidate Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Welcome Banner -->
+<div style="margin-bottom: 28px;">
+    <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 4px;">
+        Welcome, {{ user.first_name|default:user.username }}!
+        <span
+            style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.15); color: var(--accent-green); padding: 4px 12px; border-radius: 12px; font-weight: 600; vertical-align: middle; margin-left: 8px;">Candidate</span>
+    </h2>
+    <p style="color: var(--text-secondary); font-size: 0.9rem;">Track your job applications and discover new
+        opportunities</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card indigo fade-in-up stagger-1">
+        <div class="stat-icon"><i class="fas fa-paper-plane"></i></div>
+        <div class="stat-value">{{ total_applied }}</div>
+        <div class="stat-label">Applied</div>
+    </div>
+
+    <div class="stat-card blue fade-in-up stagger-2">
+        <div class="stat-icon"><i class="fas fa-star"></i></div>
+        <div class="stat-value">{{ shortlisted_count }}</div>
+        <div class="stat-label">Shortlisted</div>
+    </div>
+
+    <div class="stat-card purple fade-in-up stagger-3">
+        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+        <div class="stat-value">{{ interview_count }}</div>
+        <div class="stat-label">Interviews</div>
+    </div>
+
+    <div class="stat-card green fade-in-up stagger-4">
+        <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+        <div class="stat-value">{{ hired_count }}</div>
+        <div class="stat-label">Hired</div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <!-- My Applications -->
+    <div class="card fade-in-up">
+        <div class="card-header">
+            <h3><i class="fas fa-file-alt"></i> My Recent Applications</h3>
+            <a href="{% url 'applications:my_applications' %}" class="card-action">View all →</a>
+        </div>
+        <div class="card-body no-padding">
+            {% if my_applications %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Status</th>
+                            <th>Applied</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in my_applications %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'jobs:detail' app.job.pk %}"
+                                    style="color: var(--text-primary); font-weight: 600;">
+                                    {{ app.job.title }}
+                                </a>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ app.job.department }}
+                                </div>
+                            </td>
+                            <td><span class="status-badge {{ app.status }}">{{ app.get_status_display }}</span></td>
+                            <td>{{ app.applied_at|date:"M d" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📄</div>
+                <h3>No Applications Yet</h3>
+                <p>Start applying to jobs to track your progress here.</p>
+                <a href="{% url 'jobs:list' %}" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+                    <i class="fas fa-search"></i> Browse Jobs
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Profile Completion -->
+    <div class="card fade-in-up">
+        <div class="card-header">
+            <h3><i class="fas fa-user-check"></i> Profile Status</h3>
+        </div>
+        <div class="card-body">
+            {% with has_bio=profile.bio has_skills=profile.skills has_resume=profile.resume
+            has_education=profile.education %}
+            {% if has_bio and has_skills and has_resume and has_education %}
+            <div class="big-stat">
+                <div class="big-number" style="font-size: 2.5rem;">✅</div>
+                <div class="big-label">Profile Complete!</div>
+            </div>
+            {% else %}
+            <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 0.875rem;">Complete your profile to
+                stand out to recruiters:</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                    <i class="fas fa-{% if has_bio %}check-circle{% else %}circle{% endif %}"
+                        style="color: {% if has_bio %}var(--accent-green){% else %}var(--text-muted){% endif %};"></i>
+                    <span style="color: {% if has_bio %}var(--text-primary){% else %}var(--text-muted){% endif %};">Add
+                        Bio / Summary</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                    <i class="fas fa-{% if has_skills %}check-circle{% else %}circle{% endif %}"
+                        style="color: {% if has_skills %}var(--accent-green){% else %}var(--text-muted){% endif %};"></i>
+                    <span
+                        style="color: {% if has_skills %}var(--text-primary){% else %}var(--text-muted){% endif %};">Add
+                        Skills</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                    <i class="fas fa-{% if has_resume %}check-circle{% else %}circle{% endif %}"
+                        style="color: {% if has_resume %}var(--accent-green){% else %}var(--text-muted){% endif %};"></i>
+                    <span
+                        style="color: {% if has_resume %}var(--text-primary){% else %}var(--text-muted){% endif %};">Upload
+                        Resume</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                    <i class="fas fa-{% if has_education %}check-circle{% else %}circle{% endif %}"
+                        style="color: {% if has_education %}var(--accent-green){% else %}var(--text-muted){% endif %};"></i>
+                    <span
+                        style="color: {% if has_education %}var(--text-primary){% else %}var(--text-muted){% endif %};">Add
+                        Education</span>
+                </div>
+            </div>
+            <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary btn-sm btn-block"
+                style="margin-top: 20px;">
+                <i class="fas fa-edit"></i> Complete Profile
+            </a>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+
+<!-- Available Jobs -->
+{% if available_jobs %}
+<div style="margin-top: 8px;">
+    <div class="d-flex justify-between align-center mb-16">
+        <h3 style="font-size: 1.1rem; font-weight: 700;">
+            <i class="fas fa-fire" style="color: var(--accent-yellow);"></i> Recommended for You
+        </h3>
+        <a href="{% url 'jobs:list' %}" style="font-size: 0.85rem; font-weight: 600;">View all jobs →</a>
+    </div>
+    <div class="jobs-grid">
+        {% for job in available_jobs %}
+        <div class="job-card fade-in-up">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">{{ job.title }}</div>
+                    <div class="job-dept">{{ job.department }}</div>
+                </div>
+                <span class="status-badge active">{{ job.get_job_type_display }}</span>
+            </div>
+            <div class="job-meta">
+                <span><i class="fas fa-map-marker-alt"></i> {{ job.location|default:"Remote" }}</span>
+                <span><i class="fas fa-clock"></i> {{ job.get_experience_level_display }}</span>
+            </div>
+            {% if job.skills_list %}
+            <div class="job-skills">
+                {% for skill in job.skills_list|slice:":4" %}
+                <span class="skill-tag">{{ skill }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="job-footer">
+                <span class="job-salary">{{ job.salary_display }}</span>
+                <a href="{% url 'jobs:detail' job.pk %}" class="btn btn-primary btn-sm">
+                    View & Apply
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

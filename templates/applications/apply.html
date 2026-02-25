@@ -1,0 +1,56 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}Apply — {{ job.title }}{% endblock %}
+{% block page_title %}Apply to Job{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px;">
+    <!-- Job Summary -->
+    <div class="card fade-in-up" style="margin-bottom: 20px;">
+        <div class="card-body">
+            <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;">{{ job.title }}</h2>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; color: var(--text-secondary); font-size: 0.85rem;">
+                <span><i class="fas fa-building"></i> {{ job.department|default:"General" }}</span>
+                <span><i class="fas fa-map-marker-alt"></i> {{ job.location|default:"Remote" }}</span>
+                <span><i class="fas fa-briefcase"></i> {{ job.get_job_type_display }}</span>
+                <span style="color: var(--accent-green); font-weight: 600;">{{ job.salary_display }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Form -->
+    <div class="card fade-in-up">
+        <div class="card-header">
+            <h3><i class="fas fa-paper-plane"></i> Submit Your Application</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" data-validate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_cover_letter">Cover Letter</label>
+                    <textarea name="cover_letter" id="id_cover_letter" class="form-control" rows="6"
+                        placeholder="Tell us why you're interested in this position and what makes you a great fit...">{{ form.cover_letter.value|default:'' }}</textarea>
+                    {{ form.cover_letter.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_resume">Upload Resume (PDF/DOC)</label>
+                    <div class="file-upload">
+                        <input type="file" name="resume" id="id_resume" accept=".pdf,.doc,.docx">
+                    </div>
+                    <p class="form-help">Optional if you already have a resume in your profile</p>
+                    {{ form.resume.errors }}
+                </div>
+
+                <div class="btn-group" style="margin-top: 24px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                    <a href="{% url 'jobs:detail' job.pk %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

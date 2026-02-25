@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+<div class="layout">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h2>HireFlow</h2>
+            <span>{% if user.is_hr %}HR Panel{% else %}Candidate Panel{% endif %}</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            {% if user.is_hr %}
+            <!-- HR Navigation -->
+            <div class="nav-label">Main</div>
+            <a href="{% url 'dashboard:index' %}"
+                class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                <span class="icon"><i class="fas fa-th-large"></i></span>
+                Dashboard
+            </a>
+
+            <div class="nav-label">Recruitment</div>
+            <a href="{% url 'jobs:hr_list' %}"
+                class="{% if 'jobs' in request.path and 'manage' in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-briefcase"></i></span>
+                Job Postings
+            </a>
+            <a href="{% url 'jobs:create' %}" class="{% if 'create' in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                Create Job
+            </a>
+            <a href="{% url 'applications:all_applications' %}"
+                class="{% if 'applications/all' in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-users"></i></span>
+                All Applications
+            </a>
+
+            <div class="nav-label">Account</div>
+            <a href="{% url 'accounts:profile' %}"
+                class="{% if 'profile' in request.path and 'edit' not in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-user-circle"></i></span>
+                My Profile
+            </a>
+            <a href="{% url 'accounts:profile_edit' %}"
+                class="{% if 'profile/edit' in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-cog"></i></span>
+                Settings
+            </a>
+
+            {% else %}
+            <!-- Candidate Navigation -->
+            <div class="nav-label">Main</div>
+            <a href="{% url 'dashboard:index' %}"
+                class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                <span class="icon"><i class="fas fa-th-large"></i></span>
+                Dashboard
+            </a>
+
+            <div class="nav-label">Career</div>
+            <a href="{% url 'jobs:list' %}"
+                class="{% if 'jobs' in request.path and 'manage' not in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-search"></i></span>
+                Browse Jobs
+            </a>
+            <a href="{% url 'applications:my_applications' %}"
+                class="{% if 'applications/my' in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                My Applications
+            </a>
+
+            <div class="nav-label">Account</div>
+            <a href="{% url 'accounts:profile' %}"
+                class="{% if 'profile' in request.path and 'edit' not in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-user-circle"></i></span>
+                My Profile
+            </a>
+            <a href="{% url 'accounts:profile_edit' %}"
+                class="{% if 'profile/edit' in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-cog"></i></span>
+                Edit Profile
+            </a>
+            {% endif %}
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="{% url 'accounts:logout' %}" class="user-info" style="color: inherit;">
+                <div class="user-avatar">
+                    {{ user.first_name|first|default:"U" }}{{ user.last_name|first|default:"" }}
+                </div>
+                <div>
+                    <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+                    <div class="user-role">{{ user.get_role_display }} • Logout</div>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" id="hamburgerBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            </div>
+            <div class="topbar-search">
+                <span class="search-icon"><i class="fas fa-search"></i></span>
+                <input type="text" id="topbarSearch" placeholder="Search jobs, candidates...">
+            </div>
+            <div class="topbar-right">
+                <button class="btn-topbar" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                <a href="{% url 'accounts:profile' %}" class="btn-topbar" title="Profile">
+                    <i class="fas fa-user"></i>
+                </a>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="alert alert-{{ message.tags }}">
+                    <i
+                        class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<div class="auth-wrapper">
+    <div class="auth-card" style="max-width: 540px;">
+        <div class="logo">
+            <h1><i class="fas fa-bolt"></i> HireFlow</h1>
+            <p>Modern Recruitment Platform</p>
+        </div>
+
+        <h2>Create your account</h2>
+        <p class="subtitle">Join HireFlow as HR or Candidate</p>
+
+        {% if form.errors %}
+        <div class="alert alert-error" style="margin-bottom: 16px;">
+            <i class="fas fa-exclamation-circle"></i>
+            Please correct the errors below.
+        </div>
+        {% endif %}
+
+        <form method="post" data-validate>
+            {% csrf_token %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_first_name">First Name</label>
+                    <input type="text" name="first_name" id="id_first_name" class="form-control" placeholder="John"
+                        required value="{{ form.first_name.value|default:'' }}">
+                    {{ form.first_name.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_last_name">Last Name</label>
+                    <input type="text" name="last_name" id="id_last_name" class="form-control" placeholder="Doe"
+                        required value="{{ form.last_name.value|default:'' }}">
+                    {{ form.last_name.errors }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" class="form-control" placeholder="Choose a username"
+                    required value="{{ form.username.value|default:'' }}">
+                {{ form.username.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_email">Email Address</label>
+                <input type="email" name="email" id="id_email" class="form-control" placeholder="john@example.com"
+                    required value="{{ form.email.value|default:'' }}">
+                {{ form.email.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_role">Register As</label>
+                <select name="role" id="id_role" class="form-control" required>
+                    <option value="">Select your role</option>
+                    <option value="candidate" {% if form.role.value == 'candidate' %}selected{% endif %}>
+                        🎯 Candidate — Looking for Jobs
+                    </option>
+                    <option value="hr" {% if form.role.value == 'hr' %}selected{% endif %}>
+                        👔 HR/Admin — Hiring Manager
+                    </option>
+                </select>
+                {{ form.role.errors }}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_password1">Password</label>
+                    <input type="password" name="password1" id="id_password1" class="form-control"
+                        placeholder="Create password" required minlength="8">
+                    {{ form.password1.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password2">Confirm Password</label>
+                    <input type="password" name="password2" id="id_password2" class="form-control"
+                        placeholder="Repeat password" required>
+                    {{ form.password2.errors }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 8px;">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 0.875rem;">
+            Already have an account?
+            <a href="{% url 'accounts:login' %}" style="font-weight: 600;">Sign in</a>
+        </p>
+        <p style="text-align: center; margin-top: 8px; color: var(--text-secondary); font-size: 0.875rem;">
+            <a href="{% url 'landing' %}" style="font-weight: 600;">Back to landing page</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

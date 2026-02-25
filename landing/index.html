@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireFlow | Modern HR Platform</title>
+    <meta name="description" content="All-in-One Platform for HR & Hiring Teams. Simplify recruitment, onboarding, and team management.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 1. Navbar -->
+    <nav id="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                Hire<span>Flow</span>
+            </div>
+            <div class="nav-links-wrapper">
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#features">Product</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                    <li><a href="#help">Help</a></li>
+                </ul>
+            </div>
+            <div class="nav-right">
+                <a href="#" class="btn btn-primary d-none-sm">Start Free Trial</a>
+                <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <ul class="mobile-nav-list">
+            <li><a href="#features">Product</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="#help">Help</a></li>
+        </ul>
+        <a href="#" class="btn btn-primary mt-4">Start Free Trial</a>
+    </div>
+
+    <!-- 2. Hero Section -->
+    <header class="hero">
+        <div class="glow-blob top-blob"></div>
+        <div class="container hero-container">
+            <h1 class="fade-in">All-in-One Platform for<br>HR & Hiring Teams</h1>
+            <p class="hero-sub fade-in delay-1">Simplify recruitment, candidate tracking, onboarding, and team management in one powerful platform.</p>
+            <div class="hero-cta fade-in delay-2">
+                <a href="#" class="btn btn-primary btn-large glow-effect">Start Free Trial</a>
+            </div>
+            
+            <div class="hero-dashboard fade-in delay-3">
+                <div class="dashboard-mockup glass-panel">
+                    <div class="dash-header">
+                        <div class="dots"><span></span><span></span><span></span></div>
+                        <div class="search-bar"></div>
+                    </div>
+                    <div class="dash-body">
+                        <div class="dash-sidebar">
+                            <div class="dash-item active"></div>
+                            <div class="dash-item"></div>
+                            <div class="dash-item"></div>
+                            <div class="dash-item mt-auto"></div>
+                        </div>
+                        <div class="dash-content">
+                            <div class="dash-stats">
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-num">220</div>
+                                    <div class="stat-label">Total Employees</div>
+                                    <div class="stat-trend up">↑ 7.2%</div>
+                                </div>
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-num">98%</div>
+                                    <div class="stat-label">Attendance Rate</div>
+                                    <div class="stat-trend up">↑ 4.1%</div>
+                                </div>
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-num">05</div>
+                                    <div class="stat-label">New Hires</div>
+                                    <div class="stat-trend neutral">- 0%</div>
+                                </div>
+                                <div class="stat-card glass-panel">
+                                    <div class="stat-num">143</div>
+                                    <div class="stat-label">Active Projects</div>
+                                    <div class="stat-trend up">↑ 8.6%</div>
+                                </div>
+                            </div>
+                            <div class="dash-charts">
+                                <div class="dash-chart main-chart glass-panel">
+                                    <div class="chart-header">
+                                        <div class="chart-title">Attendance Overview</div>
+                                    </div>
+                                    <div class="heatmap">
+                                        <!-- Animated heatmap cells via CSS -->
+                                        <div class="grid-cells"></div>
+                                    </div>
+                                </div>
+                                <div class="dash-chart glass-panel flex-col">
+                                    <div class="chart-header">
+                                        <div class="chart-title">Project Overview</div>
+                                    </div>
+                                    <div class="bar-chart z-layout">
+                                        <div class="bar" style="height: 40%"></div>
+                                        <div class="bar neon-bar bounce" style="height: 85%">
+                                            <div class="tooltip">Testing</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 4. Social Proof Section -->
+    <section class="social-proof">
+        <div class="container text-center">
+            <p class="reveal">Trusted by startups and the world’s leading companies</p>
+            <div class="logos-wrapper reveal delay-1">
+                <div class="logo-placeholder"><span>◆</span> Acme</div>
+                <div class="logo-placeholder"><span>⚡</span> GlobalTech</div>
+                <div class="logo-placeholder"><span>◓</span> Horizon</div>
+                <div class="logo-placeholder"><span>❖</span> Slack</div>
+                <div class="logo-placeholder"><span>☁</span> CloudSync</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Platform Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title text-center reveal">All-in-one HR platform</h2>
+            
+            <div class="features-grid">
+                <!-- Payroll Management -->
+                <div class="feature-card glass-panel reveal hover-lift">
+                    <div class="feat-mockup">
+                        <div class="mockup-chartline">
+                            <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                                <path class="path-line" d="M0 35 L 20 28 L 40 32 L 60 15 L 80 20 L 100 5"></path>
+                            </svg>
+                            <div class="chart-dots">
+                                <div class="dot active"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Payroll Management</h3>
+                    <p>Easily manage salaries, deductions, taxes, and benefits with a fully automated payroll system that ensures accuracy and compliance.</p>
+                </div>
+                
+                <!-- Team Management -->
+                <div class="feature-card glass-panel reveal delay-1 hover-lift">
+                    <div class="feat-mockup central-focus">
+                        <div class="mockup-org-chart">
+                            <div class="org-node top-node"></div>
+                            <div class="org-lines"></div>
+                            <div class="org-leaves">
+                                <div class="org-node"></div>
+                                <div class="org-node active"></div>
+                                <div class="org-node"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Team Management</h3>
+                    <p>Oversee your entire workforce from a single dashboard, assign roles, monitor performance, and keep your team aligned.</p>
+                </div>
+                
+                <!-- Candidate Hiring (ATS) -->
+                <div class="feature-card glass-panel reveal delay-2 hover-lift">
+                    <div class="feat-mockup flex-start">
+                        <div class="mockup-pipeline">
+                            <div class="pipe-col">
+                                <div class="pipe-label"></div>
+                                <div class="pipe-item"></div>
+                                <div class="pipe-item"></div>
+                            </div>
+                            <div class="pipe-col active">
+                                <div class="pipe-label"></div>
+                                <div class="pipe-item highlight"></div>
+                            </div>
+                            <div class="pipe-col">
+                                <div class="pipe-label"></div>
+                                <div class="pipe-item"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Candidate Hiring (ATS)</h3>
+                    <p>Streamline the entire recruitment process, from job postings to interviews and offer letters, finding the right talent faster.</p>
+                </div>
+                
+                <!-- Employee Onboarding -->
+                <div class="feature-card glass-panel reveal delay-3 hover-lift">
+                    <div class="feat-mockup center-all">
+                        <div class="mockup-list">
+                            <div class="list-item done">
+                                <div class="check">✔</div> <div class="line"></div>
+                            </div>
+                            <div class="list-item active">
+                                <div class="circle"></div> <div class="line w-long"></div>
+                            </div>
+                            <div class="list-item">
+                                <div class="circle"></div> <div class="line w-short"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Employee Onboarding</h3>
+                    <p>Give new hires a smooth start with digital checklists, automated documentation, and personalized portals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Performance Section -->
+    <section class="performance">
+        <div class="container performance-container">
+            <div class="perf-content reveal">
+                <h2 class="section-title">Enhance Team Performance</h2>
+                <p class="section-desc">Empower your team with intuitive tools and streamlined workflows that eliminate bottlenecks, encourage collaboration, and drive consistent outperformance.</p>
+                
+                <div class="perf-list">
+                    <div class="perf-item feature-point">
+                        <div class="icon-box">✓</div>
+                        <div class="pt-text">
+                            <h4>Analytics dashboard</h4>
+                            <p>Real-time data on employee engagement and daily output metrics.</p>
+                        </div>
+                    </div>
+                    <div class="perf-item feature-point">
+                        <div class="icon-box">✓</div>
+                        <div class="pt-text">
+                            <h4>Productivity tracking</h4>
+                            <p>Monitor key performance indicators across all departments visually.</p>
+                        </div>
+                    </div>
+                    <div class="perf-item feature-point">
+                        <div class="icon-box">✓</div>
+                        <div class="pt-text">
+                            <h4>Hiring insights</h4>
+                            <p>Data-driven decisions for your next hires with intelligent suggestions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="perf-visual reveal delay-2">
+                <div class="abstract-graphic">
+                    <div class="glass-float f1 glass-panel">
+                        <div class="mini-chart">
+                            <div class="m-bar h1"></div><div class="m-bar h2"></div><div class="m-bar h3"></div><div class="m-bar h4 active"></div>
+                        </div>
+                        <div class="m-text mt-2">Productivity ↑</div>
+                    </div>
+                    <div class="glass-float f2 glass-panel pulse-soft">
+                        <div class="av-circle"></div>
+                        <div class="av-text">
+                            <div class="line-sm"></div>
+                            <div class="line-sm w-half"></div>
+                        </div>
+                    </div>
+                    <div class="graphic-glow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title text-center reveal">What Our Clients Say</h2>
+            <div class="testimo-grid">
+                <div class="testimo-card glass-panel reveal">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"HireFlow completely transformed our hiring process. We saved countless hours and improved the quality of our candidates drastically."</p>
+                    <div class="client-info">
+                        <div class="client-av av-1"></div>
+                        <div>
+                            <h4>Sarah Jenkins</h4>
+                            <span>HR Director, GlobalTech</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimo-card glass-panel reveal delay-1">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"The onboarding module alone is worth it. New hires are up to speed 50% faster, and the team loves the intuitive interface."</p>
+                    <div class="client-info">
+                        <div class="client-av av-2"></div>
+                        <div>
+                            <h4>Marcus O'Neil</h4>
+                            <span>CEO, StartupInc</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimo-card glass-panel reveal delay-2">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"Managing payroll used to be a nightmare. Now it's a few clicks. Unbelievable platform with an amazing user experience."</p>
+                    <div class="client-info">
+                        <div class="client-av av-3"></div>
+                        <div>
+                            <h4>Emily Chen</h4>
+                            <span>Operations Mgr, DesignCo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Final CTA Section -->
+    <section class="final-cta">
+        <div class="glow-bg-bottom"></div>
+        <div class="container cta-container glass-panel reveal zoom-in">
+            <h2>Start building your dream team today</h2>
+            <p>Join thousands of companies redefining HR with HireFlow.</p>
+            <a href="#" class="btn btn-primary btn-large glow-effect mt-4 relative-z">Start Free Trial</a>
+        </div>
+    </section>
+
+    <!-- 8. Footer -->
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    Hire<span>Flow</span>
+                </div>
+                <p>The modern operating system for HR, payroll, and recruitment.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">Tw</a>
+                    <a href="#" class="social-icon">Li</a>
+                    <a href="#" class="social-icon">In</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Integrations</a></li>
+                    <li><a href="#">Changelog</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Help Center</h4>
+                <ul>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Knowledge Base</a></li>
+                    <li><a href="#">Community</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="footer-bottom flex-between">
+                <p>&copy; 2026 HireFlow Inc. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

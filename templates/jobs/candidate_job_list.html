@@ -1,0 +1,90 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}Browse Jobs{% endblock %}
+{% block page_title %}Browse Jobs{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <p style="color: var(--text-secondary); font-size: 0.875rem;">Discover opportunities that match your skills</p>
+</div>
+
+<!-- Filter Bar -->
+<form method="get" class="filter-bar">
+    <input type="text" name="q" placeholder="Search by title, skills, department..." value="{{ query }}"
+        style="flex: 1; min-width: 200px;">
+    <select name="type">
+        <option value="">All Types</option>
+        {% for val, label in job_type_choices %}
+        <option value="{{ val }}" {% if job_type == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    <select name="experience">
+        <option value="">All Experience</option>
+        {% for val, label in experience_choices %}
+        <option value="{{ val }}" {% if experience == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" name="location" placeholder="Location..." value="{{ location }}" style="width: 150px;">
+    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Search</button>
+    {% if query or job_type or experience or location %}
+    <a href="{% url 'jobs:list' %}" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i> Clear</a>
+    {% endif %}
+</form>
+
+<!-- Jobs Grid -->
+{% if jobs %}
+<div class="jobs-grid">
+    {% for job in jobs %}
+    <div class="job-card fade-in-up">
+        <div class="job-header">
+            <div>
+                <div class="job-title">{{ job.title }}</div>
+                <div class="job-dept">{{ job.department|default:"General" }}</div>
+            </div>
+            <span class="status-badge active">{{ job.get_job_type_display }}</span>
+        </div>
+
+        <p
+            style="color: var(--text-secondary); font-size: 0.85rem; margin: 8px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ job.description|truncatewords:25 }}
+        </p>
+
+        <div class="job-meta">
+            <span><i class="fas fa-map-marker-alt"></i> {{ job.location|default:"Remote" }}</span>
+            <span><i class="fas fa-layer-group"></i> {{ job.get_experience_level_display }}</span>
+            {% if job.deadline %}
+            <span><i class="fas fa-calendar"></i> Deadline: {{ job.deadline|date:"M d" }}</span>
+            {% endif %}
+        </div>
+
+        {% if job.skills_list %}
+        <div class="job-skills">
+            {% for skill in job.skills_list|slice:":5" %}
+            <span class="skill-tag">{{ skill }}</span>
+            {% endfor %}
+            {% if job.skills_list|length > 5 %}
+            <span class="skill-tag" style="opacity: 0.6;">+{{ job.skills_list|length|add:"-5" }}</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="job-footer">
+            <span class="job-salary">{{ job.salary_display }}</span>
+            <a href="{% url 'jobs:detail' job.pk %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-arrow-right"></i> View Details
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No Jobs Found</h3>
+        <p>{% if query or job_type or experience %}No jobs match your search criteria. Try different filters.{% else
+            %}No active job openings at the moment. Check back later!{% endif %}</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

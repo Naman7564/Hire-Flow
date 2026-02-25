@@ -1,0 +1,91 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}Update Application Status{% endblock %}
+{% block page_title %}Update Application{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px;">
+    <!-- Application Summary -->
+    <div class="card fade-in-up" style="margin-bottom: 20px;">
+        <div class="card-body">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                <div
+                    style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; color: white;">
+                    {{ application.candidate.first_name|first|default:"?" }}
+                </div>
+                <div>
+                    <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 2px;">{{
+                        application.candidate.get_full_name|default:application.candidate.username }}</h2>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">{{ application.candidate.email }}</p>
+                </div>
+                <span class="status-badge {{ application.status }}" style="margin-left: auto;">{{
+                    application.get_status_display }}</span>
+            </div>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-secondary);">
+                <span><i class="fas fa-briefcase"></i> {{ application.job.title }}</span>
+                <span><i class="fas fa-calendar"></i> Applied {{ application.applied_at|date:"M d, Y" }}</span>
+            </div>
+
+            {% if application.cover_letter %}
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-light);">
+                <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">
+                    Cover Letter</h4>
+                <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.7; white-space: pre-line;">
+                    {{ application.cover_letter }}</p>
+            </div>
+            {% endif %}
+
+            {% if application.resume %}
+            <div style="margin-top: 16px;">
+                <a href="{{ application.resume.url }}" target="_blank" class="btn btn-outline btn-sm">
+                    <i class="fas fa-download"></i> Download Resume
+                </a>
+            </div>
+            {% endif %}
+
+            <div style="margin-top: 12px;">
+                <a href="{% url 'applications:candidate_detail' application.candidate.pk %}"
+                    class="btn btn-secondary btn-sm">
+                    <i class="fas fa-user"></i> View Full Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status Form -->
+    <div class="card fade-in-up">
+        <div class="card-header">
+            <h3><i class="fas fa-edit"></i> Update Status</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_status">Application Status</label>
+                    <select name="status" id="id_status" class="form-control">
+                        {% for val, label in form.fields.status.choices %}
+                        <option value="{{ val }}" {% if form.status.value == val %}selected{% endif %}>{{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_hr_notes">Internal Notes</label>
+                    <textarea name="hr_notes" id="id_hr_notes" class="form-control" rows="3"
+                        placeholder="Add internal notes about this candidate...">{{ form.hr_notes.value|default:'' }}</textarea>
+                    <p class="form-help">These notes are only visible to HR team members.</p>
+                </div>
+
+                <div class="btn-group" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Update Status
+                    </button>
+                    <a href="{% url 'jobs:detail' application.job.pk %}" class="btn btn-secondary">Back to Job</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

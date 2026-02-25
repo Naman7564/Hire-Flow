@@ -1,0 +1,73 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}My Applications{% endblock %}
+{% block page_title %}My Applications{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <p style="color: var(--text-secondary); font-size: 0.875rem;">Track all your job applications</p>
+</div>
+
+<!-- Filter -->
+<div class="filter-bar" style="margin-bottom: 20px;">
+    <span style="color: var(--text-secondary); font-size: 0.85rem; font-weight: 600;">Filter:</span>
+    <a href="{% url 'applications:my_applications' %}"
+        class="btn btn-sm {% if not status_filter %}btn-primary{% else %}btn-secondary{% endif %}">All</a>
+    {% for val, label in status_choices %}
+    <a href="?status={{ val }}"
+        class="btn btn-sm {% if status_filter == val %}btn-primary{% else %}btn-secondary{% endif %}">{{ label }}</a>
+    {% endfor %}
+</div>
+
+<div class="card fade-in-up">
+    <div class="card-body no-padding">
+        {% if applications %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Department</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Applied</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applications %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'jobs:detail' app.job.pk %}"
+                                style="color: var(--text-primary); font-weight: 600;">
+                                {{ app.job.title }}
+                            </a>
+                        </td>
+                        <td>{{ app.job.department|default:"-" }}</td>
+                        <td>{{ app.job.get_job_type_display }}</td>
+                        <td><span class="status-badge {{ app.status }}">{{ app.get_status_display }}</span></td>
+                        <td>{{ app.applied_at|date:"M d, Y" }}</td>
+                        <td>
+                            <a href="{% url 'jobs:detail' app.job.pk %}" class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>No Applications{% if status_filter %} with this Status{% endif %}</h3>
+            <p>{% if status_filter %}Try a different filter or {% endif %}Start browsing jobs to find your next
+                opportunity.</p>
+            <a href="{% url 'jobs:list' %}" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+                <i class="fas fa-search"></i> Browse Jobs
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

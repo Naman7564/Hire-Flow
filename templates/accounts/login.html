@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="logo">
+            <h1><i class="fas fa-bolt"></i> HireFlow</h1>
+            <p>Modern Recruitment Platform</p>
+        </div>
+
+        <h2>Welcome back</h2>
+        <p class="subtitle">Sign in to your account to continue</p>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" style="margin-bottom: 16px;">
+            <i class="fas fa-info-circle"></i> {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if form.errors %}
+        <div class="alert alert-error" style="margin-bottom: 16px;">
+            <i class="fas fa-exclamation-circle"></i> Invalid username or password. Please try again.
+        </div>
+        {% endif %}
+
+        <form method="post" data-validate>
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" class="form-control"
+                    placeholder="Enter your username" required autocomplete="username"
+                    value="{{ form.username.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                <input type="password" name="password" id="id_password" class="form-control"
+                    placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 8px;">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 0.875rem;">
+            Don't have an account?
+            <a href="{% url 'accounts:register' %}" style="font-weight: 600;">Create one now</a>
+        </p>
+        <p style="text-align: center; margin-top: 8px; color: var(--text-secondary); font-size: 0.875rem;">
+            <a href="{% url 'landing' %}" style="font-weight: 600;">Back to landing page</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

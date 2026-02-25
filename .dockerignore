@@ -1,0 +1,14 @@
+__pycache__
+*.pyc
+*.pyo
+*.mo
+*.db
+*.css.map
+db.sqlite3
+.env
+media/
+mysql_data/
+.git
+.gitignore
+*.md
+.vscode

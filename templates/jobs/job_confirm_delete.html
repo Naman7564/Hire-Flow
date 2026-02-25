@@ -1,0 +1,26 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}Delete Job{% endblock %}
+{% block page_title %}Delete Job{% endblock %}
+
+{% block content %}
+<div class="card fade-in-up">
+    <div class="card-body">
+        <div class="confirm-box">
+            <div class="confirm-icon">⚠️</div>
+            <h2>Delete "{{ job.title }}"?</h2>
+            <p>This will permanently delete this job posting and all associated applications. This action cannot be
+                undone.</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="btn-group" style="justify-content: center;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Yes, Delete
+                    </button>
+                    <a href="{% url 'jobs:detail' job.pk %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

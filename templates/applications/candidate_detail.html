@@ -1,0 +1,153 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}{{ candidate.get_full_name }} — Profile{% endblock %}
+{% block page_title %}Candidate Profile{% endblock %}
+
+{% block content %}
+<!-- Profile Card -->
+<div class="card fade-in-up" style="margin-bottom: 24px;">
+    <div class="profile-card">
+        <div class="profile-avatar">
+            {% if candidate.avatar %}
+            <img src="{{ candidate.avatar.url }}" alt="{{ candidate.get_full_name }}">
+            {% else %}
+            {{ candidate.first_name|first|default:"?" }}{{ candidate.last_name|first|default:"" }}
+            {% endif %}
+        </div>
+        <div class="profile-info">
+            <h2>{{ candidate.get_full_name|default:candidate.username }}</h2>
+            {% if profile %}
+            <p class="headline">{{ profile.headline|default:"No headline" }}</p>
+            <div class="detail-row"><i class="fas fa-envelope"></i> {{ candidate.email }}</div>
+            {% if candidate.phone %}
+            <div class="detail-row"><i class="fas fa-phone"></i> {{ candidate.phone }}</div>
+            {% endif %}
+            {% if profile.location %}
+            <div class="detail-row"><i class="fas fa-map-marker-alt"></i> {{ profile.location }}</div>
+            {% endif %}
+            <div class="detail-row"><i class="fas fa-clock"></i> {{ profile.experience_years }} years experience</div>
+            {% endif %}
+
+            {% if profile.resume %}
+            <a href="{{ profile.resume.url }}" target="_blank" class="btn btn-outline btn-sm" style="margin-top: 12px;">
+                <i class="fas fa-download"></i> Download Resume
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    {% if profile %}
+    <div>
+        {% if profile.bio %}
+        <div class="card fade-in-up" style="margin-bottom: 20px;">
+            <div class="card-header">
+                <h3>About</h3>
+            </div>
+            <div class="card-body">
+                <p style="color: var(--text-secondary); line-height: 1.8; white-space: pre-line;">{{ profile.bio }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if profile.skills_list %}
+        <div class="card fade-in-up" style="margin-bottom: 20px;">
+            <div class="card-header">
+                <h3>Skills</h3>
+            </div>
+            <div class="card-body">
+                <div class="job-skills" style="gap: 8px;">
+                    {% for skill in profile.skills_list %}
+                    <span class="skill-tag">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if profile.education %}
+        <div class="card fade-in-up">
+            <div class="card-header">
+                <h3>Education</h3>
+            </div>
+            <div class="card-body">
+                <p style="color: var(--text-secondary); white-space: pre-line;">{{ profile.education }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div>
+        <!-- Application History -->
+        <div class="card fade-in-up">
+            <div class="card-header">
+                <h3><i class="fas fa-history"></i> Application History</h3>
+            </div>
+            <div class="card-body no-padding">
+                {% if applications %}
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Job</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                            <tr>
+                                <td style="font-weight: 600;">{{ app.job.title }}</td>
+                                <td><span class="status-badge {{ app.status }}">{{ app.get_status_display }}</span></td>
+                                <td>{{ app.applied_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'applications:update_status' app.pk %}"
+                                        class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state" style="padding: 30px;">
+                    <p>No applications from this candidate.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if profile %}
+        {% if profile.linkedin_url or profile.github_url or profile.portfolio_url %}
+        <div class="card fade-in-up" style="margin-top: 20px;">
+            <div class="card-header">
+                <h3>Links</h3>
+            </div>
+            <div class="card-body">
+                {% if profile.linkedin_url %}
+                <div style="margin-bottom: 8px;">
+                    <a href="{{ profile.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </div>
+                {% endif %}
+                {% if profile.github_url %}
+                <div style="margin-bottom: 8px;">
+                    <a href="{{ profile.github_url }}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                </div>
+                {% endif %}
+                {% if profile.portfolio_url %}
+                <div>
+                    <a href="{{ profile.portfolio_url }}" target="_blank"><i class="fas fa-globe"></i> Portfolio</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
