@@ -97,8 +97,7 @@
             <h3><i class="fas fa-user-check"></i> Profile Status</h3>
         </div>
         <div class="card-body">
-            {% with has_bio=profile.bio has_skills=profile.skills has_resume=profile.resume
-            has_education=profile.education %}
+            {% with has_bio=profile.bio has_skills=profile.skills has_resume=profile.resume has_education=profile.education %}
             {% if has_bio and has_skills and has_resume and has_education %}
             <div class="big-stat">
                 <div class="big-number" style="font-size: 2.5rem;">✅</div>

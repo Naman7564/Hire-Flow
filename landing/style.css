@@ -124,6 +124,18 @@ p {
   box-shadow: var(--shadow-glow);
 }
 
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
 .btn-large {
   padding: 1rem 2.5rem;
   font-size: 1.1rem;
@@ -905,7 +917,7 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .nav-menu, .nav-right .btn-primary { display: none; }
+  .nav-menu, .nav-right .btn { display: none; }
   .hamburger { display: flex; }
   .footer-grid { grid-template-columns: 1fr; }
   .hero { padding: 8rem 0 4rem; }

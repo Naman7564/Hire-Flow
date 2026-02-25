@@ -27,6 +27,7 @@
                 </ul>
             </div>
             <div class="nav-right">
+                <a href="{% url 'accounts:login' %}" class="btn btn-secondary d-none-sm">Login</a>
                 <a href="{% url 'accounts:register' %}" class="btn btn-primary d-none-sm">Start Free Trial</a>
                 <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
                     <span></span><span></span><span></span>
@@ -44,6 +45,7 @@
             <li><a href="#resources">Resources</a></li>
             <li><a href="#help">Help</a></li>
         </ul>
+        <a href="{% url 'accounts:login' %}" class="btn btn-secondary mt-4">Login</a>
         <a href="{% url 'accounts:register' %}" class="btn btn-primary mt-4">Start Free Trial</a>
     </div>
 
