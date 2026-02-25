@@ -22,6 +22,20 @@ class User(AbstractUser):
     def is_candidate(self):
         return self.role == 'candidate'
 
+    @property
+    def display_name(self):
+        full_name = self.get_full_name().strip()
+        if full_name:
+            return full_name
+
+        # Ignore placeholder-like values that can leak from bad seed/input data.
+        for value in (self.first_name, self.email, self.username):
+            value = (value or '').strip()
+            if value and '{{' not in value and '{%' not in value:
+                return value
+
+        return f'User #{self.pk}'
+
 
 class CandidateProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='candidate_profile')

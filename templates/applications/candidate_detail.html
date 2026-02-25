@@ -1,6 +1,6 @@
 {% extends "dashboard/base_dashboard.html" %}
 
-{% block title %}{{ candidate.get_full_name }} — Profile{% endblock %}
+{% block title %}{{ candidate.display_name }} — Profile{% endblock %}
 {% block page_title %}Candidate Profile{% endblock %}
 
 {% block content %}
@@ -9,13 +9,13 @@
     <div class="profile-card">
         <div class="profile-avatar">
             {% if candidate.avatar %}
-            <img src="{{ candidate.avatar.url }}" alt="{{ candidate.get_full_name }}">
+            <img src="{{ candidate.avatar.url }}" alt="{{ candidate.display_name }}">
             {% else %}
             {{ candidate.first_name|first|default:"?" }}{{ candidate.last_name|first|default:"" }}
             {% endif %}
         </div>
         <div class="profile-info">
-            <h2>{{ candidate.get_full_name|default:candidate.username }}</h2>
+            <h2>{{ candidate.display_name }}</h2>
             {% if profile %}
             <p class="headline">{{ profile.headline|default:"No headline" }}</p>
             <div class="detail-row"><i class="fas fa-envelope"></i> {{ candidate.email }}</div>
