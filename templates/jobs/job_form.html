@@ -20,19 +20,21 @@
                 {{ form.title.errors }}
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="id_department">Department</label>
-                    <input type="text" name="department" id="id_department" class="form-control"
-                        value="{{ form.department.value|default:'' }}" placeholder="e.g., Engineering">
-                    {{ form.department.errors }}
-                </div>
-                <div class="form-group">
-                    <label for="id_location">Location</label>
-                    <input type="text" name="location" id="id_location" class="form-control"
-                        value="{{ form.location.value|default:'' }}" placeholder="e.g., Mumbai, India / Remote">
-                    {{ form.location.errors }}
-                </div>
+            <div class="form-group">
+                <label for="id_location">Location</label>
+                <input type="text" name="location" id="id_location" class="form-control"
+                    value="{{ form.location.value|default:'' }}" placeholder="e.g., Mumbai, India / Remote">
+                {{ form.location.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_job_type">Job Type</label>
+                <select name="job_type" id="id_job_type" class="form-control">
+                    {% for val, label in form.fields.job_type.choices %}
+                    <option value="{{ val }}" {% if form.job_type.value == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                {{ form.job_type.errors }}
             </div>
 
             <div class="form-group">
@@ -40,83 +42,6 @@
                 <textarea name="description" id="id_description" class="form-control" rows="5" required
                     placeholder="Describe the role, company culture, and what makes this position exciting...">{{ form.description.value|default:'' }}</textarea>
                 {{ form.description.errors }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_requirements">Requirements</label>
-                <textarea name="requirements" id="id_requirements" class="form-control" rows="4"
-                    placeholder="List the qualifications and requirements...">{{ form.requirements.value|default:'' }}</textarea>
-                {{ form.requirements.errors }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_responsibilities">Responsibilities</label>
-                <textarea name="responsibilities" id="id_responsibilities" class="form-control" rows="4"
-                    placeholder="List the key responsibilities...">{{ form.responsibilities.value|default:'' }}</textarea>
-                {{ form.responsibilities.errors }}
-            </div>
-
-            <div class="form-group">
-                <label for="id_skills_required">Required Skills</label>
-                <input type="text" name="skills_required" id="id_skills_required" class="form-control"
-                    value="{{ form.skills_required.value|default:'' }}"
-                    placeholder="Python, Django, REST APIs, Docker...">
-                <p class="form-help">Comma-separated skills</p>
-                {{ form.skills_required.errors }}
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="id_job_type">Job Type</label>
-                    <select name="job_type" id="id_job_type" class="form-control">
-                        {% for val, label in form.fields.job_type.choices %}
-                        <option value="{{ val }}" {% if form.job_type.value == val %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                    {{ form.job_type.errors }}
-                </div>
-                <div class="form-group">
-                    <label for="id_experience_level">Experience Level</label>
-                    <select name="experience_level" id="id_experience_level" class="form-control">
-                        {% for val, label in form.fields.experience_level.choices %}
-                        <option value="{{ val }}" {% if form.experience_level.value == val %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                    {{ form.experience_level.errors }}
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="id_salary_min">Salary Range — Min (₹)</label>
-                    <input type="number" name="salary_min" id="id_salary_min" class="form-control"
-                        value="{{ form.salary_min.value|default:'' }}" placeholder="e.g., 500000">
-                    {{ form.salary_min.errors }}
-                </div>
-                <div class="form-group">
-                    <label for="id_salary_max">Salary Range — Max (₹)</label>
-                    <input type="number" name="salary_max" id="id_salary_max" class="form-control"
-                        value="{{ form.salary_max.value|default:'' }}" placeholder="e.g., 1500000">
-                    {{ form.salary_max.errors }}
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="id_status">Status</label>
-                    <select name="status" id="id_status" class="form-control">
-                        {% for val, label in form.fields.status.choices %}
-                        <option value="{{ val }}" {% if form.status.value == val %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                    {{ form.status.errors }}
-                </div>
-                <div class="form-group">
-                    <label for="id_deadline">Application Deadline</label>
-                    <input type="date" name="deadline" id="id_deadline" class="form-control"
-                        value="{{ form.deadline.value|default:'' }}">
-                    {{ form.deadline.errors }}
-                </div>
             </div>
 
             <div class="btn-group" style="margin-top: 24px;">
@@ -128,12 +53,4 @@
         </form>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        initSkillsInput('id_skills_required');
-    });
-</script>
 {% endblock %}
