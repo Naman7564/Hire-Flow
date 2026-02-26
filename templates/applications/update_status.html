@@ -14,12 +14,10 @@
                     {{ application.candidate.first_name|first|default:"?" }}
                 </div>
                 <div>
-                    <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 2px;">{{
-                        application.candidate.display_name }}</h2>
+                    <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 2px;">{{ application.candidate.display_name }}</h2>
                     <p style="color: var(--text-muted); font-size: 0.85rem;">{{ application.candidate.email }}</p>
                 </div>
-                <span class="status-badge {{ application.status }}" style="margin-left: auto;">{{
-                    application.get_status_display }}</span>
+                <span class="status-badge {{ application.status }}" style="margin-left: auto;">{{ application.get_status_display }}</span>
             </div>
             <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-secondary);">
                 <span><i class="fas fa-briefcase"></i> {{ application.job.title }}</span>

@@ -54,10 +54,8 @@
                                     {{ app.candidate.first_name|first|default:"?" }}
                                 </div>
                                 <div>
-                                    <div style="font-weight: 600; color: var(--text-primary);">{{
-                                        app.candidate.display_name }}</div>
-                                    <div style="font-size: 0.72rem; color: var(--text-muted);">{{ app.candidate.email }}
-                                    </div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">{{ app.candidate.display_name }}</div>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">{{ app.candidate.email }}</div>
                                 </div>
                             </div>
                         </td>
@@ -68,8 +66,7 @@
                             <span class="skill-tag">{{ skill }}</span>
                             {% endfor %}
                             {% if app.candidate.candidate_profile.skills_list|length > 2 %}
-                            <span class="skill-tag" style="opacity: 0.6;">+{{
-                                app.candidate.candidate_profile.skills_list|length|add:"-2" }}</span>
+                            <span class="skill-tag" style="opacity: 0.6;">+{{ app.candidate.candidate_profile.skills_list|length|add:"-2" }}</span>
                             {% endif %}
                             {% endif %}
                         </td>
