@@ -158,7 +158,6 @@
                     <tr>
                         <th>Name</th>
                         <th>Position</th>
-                        <th>Skills</th>
                         <th>Status</th>
                         <th>Applied</th>
                         <th>Action</th>
@@ -180,13 +179,6 @@
                             </div>
                         </td>
                         <td>{{ app.job.title }}</td>
-                        <td>
-                            {% if app.candidate.candidate_profile %}
-                            {% for skill in app.candidate.candidate_profile.skills_list|slice:":3" %}
-                            <span class="skill-tag">{{ skill }}</span>
-                            {% endfor %}
-                            {% endif %}
-                        </td>
                         <td><span class="status-badge {{ app.status }}">{{ app.get_status_display }}</span></td>
                         <td>{{ app.applied_at|date:"M d, Y" }}</td>
                         <td>
