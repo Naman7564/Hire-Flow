@@ -1,0 +1,99 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}Notifications{% endblock %}
+{% block page_title %}Notifications{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <p style="color: var(--text-secondary); font-size: 0.875rem;">
+            {% if unread_count %}{{ unread_count }} unread notification{{ unread_count|pluralize }}{% else %}All caught up!{% endif %}
+        </p>
+        {% if unread_count %}
+        <a href="?mark_all_read=1" class="btn btn-secondary btn-sm">
+            <i class="fas fa-check-double"></i> Mark All Read
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="card fade-in-up">
+        <div class="card-body no-padding">
+            {% if notifications %}
+            <div class="notification-list">
+                {% for notification in notifications %}
+                <div class="notification-item {% if not notification.is_read %}unread{% endif %}" 
+                    data-notification-id="{{ notification.pk }}">
+                    <div class="notification-icon">
+                        {% if notification.notification_type == 'interview_scheduled' %}
+                        <i class="fas fa-calendar-check" style="color: var(--accent-purple);"></i>
+                        {% elif notification.notification_type == 'interview_updated' %}
+                        <i class="fas fa-calendar-alt" style="color: var(--accent-blue);"></i>
+                        {% else %}
+                        <i class="fas fa-bell" style="color: var(--accent-primary);"></i>
+                        {% endif %}
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">{{ notification.title }}</div>
+                        <div class="notification-message">{{ notification.message|truncatewords:30 }}</div>
+                        <div class="notification-time">
+                            <i class="fas fa-clock"></i> {{ notification.created_at|timesince }} ago
+                        </div>
+                    </div>
+                    <div class="notification-actions">
+                        {% if notification.application and notification.application.interview_scheduled_at %}
+                        <a href="{% url 'applications:my_interview' notification.application.pk %}" 
+                            class="btn btn-sm btn-primary">View Details</a>
+                        {% endif %}
+                        {% if not notification.is_read %}
+                        <button type="button" class="btn btn-sm btn-secondary mark-read-btn" 
+                            data-notification-id="{{ notification.pk }}">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-bell-slash" style="font-size: 3rem; color: var(--text-muted);"></i></div>
+                <h3>No Notifications</h3>
+                <p>You don't have any notifications yet. We'll notify you when there are updates to your applications.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mark notification as read
+    document.querySelectorAll('.mark-read-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const notificationId = this.getAttribute('data-notification-id');
+            const notificationItem = this.closest('.notification-item');
+            
+            fetch(`/applications/notifications/${notificationId}/read/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCsrfToken(),
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    notificationItem.classList.remove('unread');
+                    btn.remove();
+                }
+            });
+        });
+    });
+    
+    function getCsrfToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+               document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+    }
+});
+</script>
+{% endblock %}

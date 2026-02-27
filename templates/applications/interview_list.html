@@ -1,0 +1,158 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}Interview Management{% endblock %}
+{% block page_title %}Interviews{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <p style="color: var(--text-secondary); font-size: 0.875rem;">Schedule and manage candidate interviews</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid" style="margin-bottom: 24px;">
+    <div class="stat-card purple fade-in-up stagger-1">
+        <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+        <div class="stat-value">{{ total_scheduled }}</div>
+        <div class="stat-label">Total Scheduled</div>
+    </div>
+    <div class="stat-card indigo fade-in-up stagger-2">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <div class="stat-value">{{ upcoming_today }}</div>
+        <div class="stat-label">Today</div>
+    </div>
+    <div class="stat-card blue fade-in-up stagger-3">
+        <div class="stat-icon"><i class="fas fa-calendar-week"></i></div>
+        <div class="stat-value">{{ upcoming_week }}</div>
+        <div class="stat-label">This Week</div>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<form method="get" class="filter-bar">
+    <input type="text" name="q" placeholder="Search candidate or job..." value="{{ query }}"
+        style="flex: 1; min-width: 180px;">
+    <select name="platform">
+        <option value="">All Platforms</option>
+        {% for platform in platforms %}
+        <option value="{{ platform }}" {% if platform_filter == platform %}selected{% endif %}>{{ platform }}</option>
+        {% endfor %}
+    </select>
+    <select name="date">
+        <option value="">All Dates</option>
+        <option value="today" {% if date_filter == 'today' %}selected{% endif %}>Today</option>
+        <option value="week" {% if date_filter == 'week' %}selected{% endif %}>This Week</option>
+        <option value="past" {% if date_filter == 'past' %}selected{% endif %}>Past</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-filter"></i> Filter</button>
+    {% if query or platform_filter or date_filter %}
+    <a href="{% url 'applications:interview_list' %}" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i>
+        Clear</a>
+    {% endif %}
+</form>
+
+<div class="card fade-in-up">
+    <div class="card-body no-padding">
+        {% if applications %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Candidate</th>
+                        <th>Job</th>
+                        <th>Date & Time</th>
+                        <th>Platform</th>
+                        <th>Status</th>
+                        <th>Notified</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applications %}
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div
+                                    style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; flex-shrink: 0;">
+                                    {{ app.candidate.first_name|first|default:"?" }}
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">{{ app.candidate.display_name }}</div>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">{{ app.candidate.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ app.job.title }}</td>
+                        <td>
+                            {% if app.interview_scheduled_at %}
+                            <div style="font-weight: 600; color: var(--text-primary);">
+                                {{ app.interview_scheduled_at|date:"M d, Y" }}
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">
+                                {{ app.interview_scheduled_at|time:"g:i A" }}
+                            </div>
+                            {% else %}
+                            <span style="color: var(--text-muted);">Not scheduled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if app.interview_platform %}
+                            <span class="platform-badge platform-{{ app.interview_platform|lower|cut:' ' }}">
+                                <i class="fas fa-video"></i> {{ app.interview_platform }}
+                            </span>
+                            {% else %}
+                            <span style="color: var(--text-muted);">—</span>
+                            {% endif %}
+                        </td>
+                        <td><span class="status-badge {{ app.status }}">{{ app.get_status_display }}</span></td>
+                        <td>
+                            {% if app.interview_notified_at %}
+                            <span style="color: var(--accent-green); font-size: 0.8rem;">
+                                <i class="fas fa-check-circle"></i> {{ app.interview_notified_at|date:"M d" }}
+                            </span>
+                            {% else %}
+                            <span style="color: var(--text-muted); font-size: 0.8rem;">Not sent</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                {% if app.interview_meeting_link %}
+                                <button type="button" class="btn btn-sm btn-secondary copy-link-btn" 
+                                    data-link="{{ app.interview_meeting_link }}" title="Copy Link">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                {% endif %}
+                                <a href="{% url 'applications:schedule_interview' app.pk %}" class="btn btn-sm btn-primary"
+                                    title="{% if app.interview_scheduled_at %}Edit{% else %}Schedule{% endif %}">
+                                    <i class="fas fa-{% if app.interview_scheduled_at %}edit{% else %}calendar-plus{% endif %}"></i>
+                                </a>
+                                {% if app.interview_scheduled_at and app.interview_meeting_link %}
+                                <button type="button" class="btn btn-sm btn-success send-notification-btn" 
+                                    data-app-id="{{ app.pk }}" 
+                                    data-candidate="{{ app.candidate.display_name }}"
+                                    title="Send Notification">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-calendar-times" style="font-size: 3rem; color: var(--text-muted);"></i></div>
+            <h3>No Interviews Found</h3>
+            <p>{% if query or platform_filter or date_filter %}Try adjusting your filters.{% else %}No interviews have been scheduled yet. Schedule interviews from the Applications page.{% endif %}</p>
+            <a href="{% url 'applications:all_applications' %}" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+                <i class="fas fa-users"></i> View Applications
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Toast notification container -->
+<div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999;"></div>
+{% endblock %}

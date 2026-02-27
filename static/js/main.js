@@ -306,3 +306,227 @@ function initSkillsInput(inputId) {
     input.addEventListener('input', renderTags);
     renderTags();
 }
+
+/* ============================================
+   Interview Management Functions
+   ============================================ */
+
+// Initialize interview features on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initCopyLinkButtons();
+    initSendNotificationButtons();
+    initNotificationBadge();
+});
+
+/**
+ * Initialize copy link buttons
+ */
+function initCopyLinkButtons() {
+    document.querySelectorAll('.copy-link-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const link = this.getAttribute('data-link');
+            copyMeetingLink(link);
+        });
+    });
+}
+
+/**
+ * Copy meeting link to clipboard
+ */
+function copyMeetingLink(link) {
+    if (!link) {
+        showToast('No meeting link available', 'error');
+        return;
+    }
+
+    // Use Clipboard API if available
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link)
+            .then(() => showToast('Meeting link copied to clipboard!', 'success'))
+            .catch(() => fallbackCopyText(link));
+    } else {
+        fallbackCopyText(link);
+    }
+}
+
+/**
+ * Fallback copy method for older browsers
+ */
+function fallbackCopyText(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+        document.execCommand('copy');
+        showToast('Meeting link copied to clipboard!', 'success');
+    } catch (err) {
+        showToast('Failed to copy link. Please copy manually.', 'error');
+    }
+    
+    document.body.removeChild(textarea);
+}
+
+/**
+ * Initialize send notification buttons
+ */
+function initSendNotificationButtons() {
+    document.querySelectorAll('.send-notification-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const appId = this.getAttribute('data-app-id');
+            const candidateName = this.getAttribute('data-candidate');
+            sendInterviewNotification(appId, candidateName, this);
+        });
+    });
+}
+
+/**
+ * Send interview notification to candidate
+ */
+function sendInterviewNotification(appId, candidateName, button) {
+    if (!appId) {
+        showToast('Invalid application', 'error');
+        return;
+    }
+
+    // Confirm action
+    if (!confirm(`Send interview notification to ${candidateName}?`)) {
+        return;
+    }
+
+    // Show loading state
+    const originalHtml = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    button.disabled = true;
+
+    fetch(`/applications/${appId}/send-notification/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message, 'success');
+            // Update the row to show notification was sent
+            const row = button.closest('tr');
+            if (row) {
+                const notifiedCell = row.querySelector('td:nth-child(6)');
+                if (notifiedCell && data.notified_at) {
+                    notifiedCell.innerHTML = `<span style="color: var(--accent-green); font-size: 0.8rem;">
+                        <i class="fas fa-check-circle"></i> ${data.notified_at}
+                    </span>`;
+                }
+            }
+        } else {
+            showToast(data.error || 'Failed to send notification', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('An error occurred. Please try again.', 'error');
+    })
+    .finally(() => {
+        button.innerHTML = originalHtml;
+        button.disabled = false;
+    });
+}
+
+/**
+ * Get CSRF token from cookie or meta tag
+ */
+function getCsrfToken() {
+    // Try to get from cookie first
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrftoken='));
+    
+    if (cookieValue) {
+        return cookieValue.split('=')[1];
+    }
+    
+    // Fallback to hidden input
+    const csrfInput = document.querySelector('[name=csrfmiddlewaretoken]');
+    return csrfInput ? csrfInput.value : '';
+}
+
+/**
+ * Initialize notification badge in topbar
+ */
+function initNotificationBadge() {
+    updateNotificationBadge();
+    
+    // Poll for new notifications every 30 seconds
+    setInterval(updateNotificationBadge, 30000);
+}
+
+/**
+ * Update notification badge count
+ */
+function updateNotificationBadge() {
+    const badge = document.getElementById('notificationDot');
+    if (!badge) return;
+
+    fetch('/applications/notifications/unread-count/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.count > 0) {
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        })
+        .catch(() => {
+            // Silently fail - don't show errors for badge updates
+        });
+}
+
+/**
+ * Show toast notification
+ */
+function showToast(message, type = 'info') {
+    let container = document.getElementById('toast-container');
+    
+    // Create container if it doesn't exist
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.style.cssText = 'position: fixed; bottom: 24px; right: 24px; z-index: 9999;';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    let icon;
+    switch (type) {
+        case 'success':
+            icon = 'fa-check-circle';
+            break;
+        case 'error':
+            icon = 'fa-exclamation-circle';
+            break;
+        default:
+            icon = 'fa-info-circle';
+    }
+
+    toast.innerHTML = `
+        <span class="toast-icon"><i class="fas ${icon}"></i></span>
+        <span class="toast-message">${message}</span>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+        toast.style.animation = 'toastSlideOut 0.3s ease-out forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}

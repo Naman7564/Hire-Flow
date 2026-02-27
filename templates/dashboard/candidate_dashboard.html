@@ -42,6 +42,73 @@
     </div>
 </div>
 
+{% if upcoming_interviews %}
+<!-- Upcoming Interviews Section -->
+<div class="card fade-in-up" style="margin-bottom: 20px; border-left: 3px solid var(--accent-purple);">
+    <div class="card-header">
+        <h3><i class="fas fa-calendar-check" style="color: var(--accent-purple);"></i> Upcoming Interviews</h3>
+        <a href="{% url 'applications:my_applications' %}?status=interview" class="card-action">View all &rarr;</a>
+    </div>
+    <div class="card-body">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            {% for app in upcoming_interviews %}
+            <div style="display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--bg-input); border-radius: 12px; border: 1px solid var(--border-color);">
+                <div style="flex-shrink: 0; width: 56px; height: 56px; background: linear-gradient(135deg, var(--accent-purple), var(--accent-primary)); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;">
+                    <span style="font-size: 1.1rem; font-weight: 700;">{{ app.interview_scheduled_at|date:"d" }}</span>
+                    <span style="font-size: 0.65rem; text-transform: uppercase;">{{ app.interview_scheduled_at|date:"M" }}</span>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">{{ app.job.title }}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        <i class="fas fa-clock"></i> {{ app.interview_scheduled_at|time:"g:i A" }}
+                        {% if app.interview_platform %}
+                        <span style="margin-left: 12px;"><i class="fas fa-video"></i> {{ app.interview_platform }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <a href="{% url 'applications:my_interview' app.pk %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-external-link-alt"></i> View Details
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if unread_notifications %}
+<!-- Recent Notifications -->
+<div class="card fade-in-up" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <h3><i class="fas fa-bell" style="color: var(--accent-primary);"></i> Recent Notifications</h3>
+        <a href="{% url 'applications:notifications' %}" class="card-action">View all &rarr;</a>
+    </div>
+    <div class="card-body no-padding">
+        <div class="notification-list">
+            {% for notification in unread_notifications %}
+            <a href="{% if notification.application %}{% url 'applications:my_interview' notification.application.pk %}{% else %}{% url 'applications:notifications' %}{% endif %}" 
+                class="notification-item unread" style="text-decoration: none;">
+                <div class="notification-icon">
+                    {% if notification.notification_type == 'interview_scheduled' %}
+                    <i class="fas fa-calendar-check" style="color: var(--accent-purple);"></i>
+                    {% else %}
+                    <i class="fas fa-bell" style="color: var(--accent-primary);"></i>
+                    {% endif %}
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">{{ notification.title }}</div>
+                    <div class="notification-message">{{ notification.message|truncatewords:15 }}</div>
+                    <div class="notification-time">
+                        <i class="fas fa-clock"></i> {{ notification.created_at|timesince }} ago
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="dashboard-grid">
     <!-- My Applications -->
     <div class="card fade-in-up">

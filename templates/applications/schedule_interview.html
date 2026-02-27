@@ -1,0 +1,184 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}{% if is_editing %}Edit{% else %}Schedule{% endif %} Interview{% endblock %}
+{% block page_title %}{% if is_editing %}Edit{% else %}Schedule{% endif %} Interview{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px;">
+    <!-- Application Summary -->
+    <div class="card fade-in-up" style="margin-bottom: 20px;">
+        <div class="card-body">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                <div
+                    style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; color: white;">
+                    {{ application.candidate.first_name|first|default:"?" }}
+                </div>
+                <div>
+                    <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 2px;">{{ application.candidate.display_name }}</h2>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">{{ application.candidate.email }}</p>
+                </div>
+                <span class="status-badge {{ application.status }}" style="margin-left: auto;">{{ application.get_status_display }}</span>
+            </div>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-secondary);">
+                <span><i class="fas fa-briefcase"></i> {{ application.job.title }}</span>
+                <span><i class="fas fa-map-marker-alt"></i> {{ application.job.location|default:"Remote" }}</span>
+                <span><i class="fas fa-calendar"></i> Applied {{ application.applied_at|date:"M d, Y" }}</span>
+            </div>
+            
+            {% if application.candidate.candidate_profile %}
+            <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+                {% for skill in application.candidate.candidate_profile.skills_list|slice:":5" %}
+                <span class="skill-tag">{{ skill }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if is_editing and application.interview_scheduled_at %}
+    <!-- Current Interview Info -->
+    <div class="card fade-in-up" style="margin-bottom: 20px; border-left: 3px solid var(--accent-purple);">
+        <div class="card-body">
+            <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px;">
+                <i class="fas fa-calendar-check"></i> Current Interview Details
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Date & Time</div>
+                    <div style="font-weight: 600; color: var(--text-primary);">
+                        {{ application.interview_scheduled_at|date:"M d, Y" }} at {{ application.interview_scheduled_at|time:"g:i A" }}
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Platform</div>
+                    <div style="font-weight: 600; color: var(--text-primary);">
+                        {{ application.interview_platform|default:"Not specified" }}
+                    </div>
+                </div>
+                {% if application.interview_notified_at %}
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Last Notified</div>
+                    <div style="font-weight: 600; color: var(--accent-green);">
+                        <i class="fas fa-check-circle"></i> {{ application.interview_notified_at|date:"M d, Y g:i A" }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% if application.interview_meeting_link %}
+            <div style="margin-top: 12px;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Meeting Link</div>
+                <div class="meeting-link-display">
+                    <code style="font-size: 0.8rem; color: var(--accent-primary); word-break: break-all;">{{ application.interview_meeting_link }}</code>
+                    <button type="button" class="btn btn-sm btn-secondary copy-link-btn" data-link="{{ application.interview_meeting_link }}" style="margin-left: 8px;">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Schedule Interview Form -->
+    <div class="card fade-in-up">
+        <div class="card-header">
+            <h3><i class="fas fa-calendar-plus"></i> {% if is_editing %}Edit{% else %}Schedule{% endif %} Interview</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" id="interviewForm">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_interview_scheduled_at">Interview Date & Time <span style="color: var(--accent-red);">*</span></label>
+                        <input type="datetime-local" name="interview_scheduled_at" id="id_interview_scheduled_at" 
+                            class="form-control" required
+                            value="{% if application.interview_scheduled_at %}{{ application.interview_scheduled_at|date:'Y-m-d\TH:i' }}{% endif %}">
+                        {% if form.interview_scheduled_at.errors %}
+                        <p class="form-error">{{ form.interview_scheduled_at.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_interview_meeting_link">Meeting Link <span style="color: var(--accent-red);">*</span></label>
+                    <div style="position: relative;">
+                        <input type="url" name="interview_meeting_link" id="id_interview_meeting_link" 
+                            class="form-control" required
+                            placeholder="https://zoom.us/j/... or https://meet.google.com/..."
+                            value="{{ application.interview_meeting_link|default:'' }}">
+                        <div id="platformPreview" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: none;">
+                            <span class="platform-badge" id="detectedPlatform"></span>
+                        </div>
+                    </div>
+                    <p class="form-help">Supports Zoom, Google Meet, Microsoft Teams, Webex, Skype, and other video platforms.</p>
+                    {% if form.interview_meeting_link.errors %}
+                    <p class="form-error">{{ form.interview_meeting_link.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_interview_notes">Instructions for Candidate</label>
+                    <textarea name="interview_notes" id="id_interview_notes" class="form-control" rows="4"
+                        placeholder="E.g., Please prepare a brief introduction about yourself and your experience. The interview will include a technical discussion followed by Q&A.">{{ application.interview_notes|default:'' }}</textarea>
+                    <p class="form-help">These notes will be visible to the candidate when they view interview details.</p>
+                </div>
+
+                <div class="btn-group" style="margin-top: 24px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> {% if is_editing %}Update{% else %}Schedule{% endif %} Interview
+                    </button>
+                    <a href="{% url 'applications:interview_list' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const meetingLinkInput = document.getElementById('id_interview_meeting_link');
+    const platformPreview = document.getElementById('platformPreview');
+    const detectedPlatform = document.getElementById('detectedPlatform');
+    
+    function detectPlatform(url) {
+        if (!url) return null;
+        url = url.toLowerCase();
+        
+        const platforms = {
+            'zoom.us': { name: 'Zoom', icon: 'fa-video', color: '#2D8CFF' },
+            'meet.google': { name: 'Google Meet', icon: 'fa-video', color: '#00832D' },
+            'teams.microsoft': { name: 'Teams', icon: 'fa-video', color: '#6264A7' },
+            'teams.live': { name: 'Teams', icon: 'fa-video', color: '#6264A7' },
+            'webex': { name: 'Webex', icon: 'fa-video', color: '#00CF64' },
+            'skype': { name: 'Skype', icon: 'fa-video', color: '#00AFF0' },
+            'whereby': { name: 'Whereby', icon: 'fa-video', color: '#FF6B6B' }
+        };
+        
+        for (const [pattern, info] of Object.entries(platforms)) {
+            if (url.includes(pattern)) {
+                return info;
+            }
+        }
+        return null;
+    }
+    
+    meetingLinkInput.addEventListener('input', function() {
+        const platform = detectPlatform(this.value);
+        if (platform) {
+            detectedPlatform.innerHTML = `<i class="fas ${platform.icon}"></i> ${platform.name}`;
+            detectedPlatform.style.background = platform.color + '20';
+            detectedPlatform.style.color = platform.color;
+            platformPreview.style.display = 'block';
+        } else {
+            platformPreview.style.display = 'none';
+        }
+    });
+    
+    // Trigger on load if value exists
+    if (meetingLinkInput.value) {
+        meetingLinkInput.dispatchEvent(new Event('input'));
+    }
+});
+</script>
+{% endblock %}

@@ -1545,3 +1545,225 @@ textarea.form-control {
 .align-center { align-items: center; }
 .justify-between { justify-content: space-between; }
 .flex-wrap { flex-wrap: wrap; }
+
+/* ============================================
+   Interview Management Styles
+   ============================================ */
+
+/* Platform Badges */
+.platform-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--accent-primary);
+}
+
+.platform-badge.platform-zoom {
+    background: rgba(45, 140, 255, 0.12);
+    color: #2D8CFF;
+}
+
+.platform-badge.platform-googlemeet {
+    background: rgba(0, 131, 45, 0.12);
+    color: #00832D;
+}
+
+.platform-badge.platform-microsoftteams,
+.platform-badge.platform-teams {
+    background: rgba(98, 100, 167, 0.12);
+    color: #6264A7;
+}
+
+.platform-badge.platform-webex {
+    background: rgba(0, 207, 100, 0.12);
+    color: #00CF64;
+}
+
+.platform-badge.platform-skype {
+    background: rgba(0, 175, 240, 0.12);
+    color: #00AFF0;
+}
+
+.platform-badge.platform-whereby {
+    background: rgba(255, 107, 107, 0.12);
+    color: #FF6B6B;
+}
+
+.platform-badge.platform-other {
+    background: rgba(100, 116, 139, 0.12);
+    color: var(--text-secondary);
+}
+
+/* Meeting Link Display */
+.meeting-link-display {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-top: 4px;
+}
+
+/* Notification Styles */
+.notification-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background var(--transition-fast);
+    cursor: pointer;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item:hover {
+    background: rgba(99, 102, 241, 0.04);
+}
+
+.notification-item.unread {
+    background: rgba(99, 102, 241, 0.06);
+}
+
+.notification-item.unread .notification-title {
+    font-weight: 700;
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--bg-input);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.notification-message {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.notification-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.notification-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Toast Notifications */
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin-bottom: 12px;
+    animation: toastSlideIn 0.3s ease-out;
+    min-width: 280px;
+}
+
+.toast.success {
+    border-left: 3px solid var(--accent-green);
+}
+
+.toast.error {
+    border-left: 3px solid var(--accent-red);
+}
+
+.toast.info {
+    border-left: 3px solid var(--accent-primary);
+}
+
+.toast-icon {
+    font-size: 1.1rem;
+}
+
+.toast.success .toast-icon {
+    color: var(--accent-green);
+}
+
+.toast.error .toast-icon {
+    color: var(--accent-red);
+}
+
+.toast.info .toast-icon {
+    color: var(--accent-primary);
+}
+
+.toast-message {
+    flex: 1;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes toastSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Interview responsive table */
+@media (max-width: 768px) {
+    .notification-item {
+        padding: 12px 16px;
+    }
+
+    .notification-actions {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+}

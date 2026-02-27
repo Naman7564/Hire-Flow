@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
+from django.utils import timezone
 from jobs.models import Job
-from applications.models import Application
+from applications.models import Application, Notification
 from accounts.models import User, CandidateProfile
 import json
 
@@ -85,6 +86,19 @@ def candidate_dashboard(request):
         id__in=applied_job_ids
     ).order_by('-created_at')[:6]
 
+    # Upcoming interviews
+    upcoming_interviews = my_applications.filter(
+        interview_scheduled_at__gte=timezone.now()
+    ).order_by('interview_scheduled_at')[:3]
+
+    # Recent unread notifications
+    unread_notifications = Notification.objects.filter(
+        user=request.user,
+        is_read=False
+    ).order_by('-created_at')[:5]
+
+    unread_notification_count = unread_notifications.count()
+
     context = {
         'profile': profile,
         'my_applications': my_applications[:10],
@@ -94,5 +108,8 @@ def candidate_dashboard(request):
         'shortlisted_count': app_data.get('shortlisted', 0),
         'interview_count': app_data.get('interview', 0),
         'hired_count': app_data.get('hired', 0),
+        'upcoming_interviews': upcoming_interviews,
+        'unread_notifications': unread_notifications,
+        'unread_notification_count': unread_notification_count,
     }
     return render(request, 'dashboard/candidate_dashboard.html', context)

@@ -38,6 +38,11 @@
                 <span class="icon"><i class="fas fa-users"></i></span>
                 All Applications
             </a>
+            <a href="{% url 'applications:interview_list' %}"
+                class="{% if 'interviews' in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                Interviews
+            </a>
 
             <div class="nav-label">Account</div>
             <a href="{% url 'accounts:profile' %}"
@@ -114,10 +119,10 @@
                 <input type="text" id="topbarSearch" placeholder="Search jobs, candidates...">
             </div>
             <div class="topbar-right">
-                <button class="btn-topbar" title="Notifications">
+                <a href="{% url 'applications:notifications' %}" class="btn-topbar" title="Notifications" id="notificationBtn">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-dot"></span>
-                </button>
+                    <span class="notification-dot" id="notificationDot" style="display: none;"></span>
+                </a>
                 <a href="{% url 'accounts:profile' %}" class="btn-topbar" title="Profile">
                     <i class="fas fa-user"></i>
                 </a>
