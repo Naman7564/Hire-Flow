@@ -1,75 +1,84 @@
 {% extends "dashboard/base_dashboard.html" %}
+{% load static %}
 
 {% block title %}Interview Details{% endblock %}
 {% block page_title %}Interview Details{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/interview.css' %}">
+{% endblock %}
+
 {% block content %}
-<div style="max-width: 700px;">
+<div class="interview-page">
+
     <!-- Interview Header Card -->
-    <div class="card fade-in-up" style="margin-bottom: 20px; overflow: visible;">
-        <div class="card-body" style="position: relative;">
-            <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-primary), var(--accent-purple)); border-radius: 16px 16px 0 0;"></div>
-            
-            <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 8px;">
+    <div class="card interview-header">
+        <div class="interview-header-gradient"></div>
+        <div class="card-body">
+            <div class="interview-header-content">
                 <div>
-                    <span class="status-badge interview" style="margin-bottom: 8px; display: inline-block;">
+                    <span class="status-badge interview">
                         <i class="fas fa-calendar-check"></i> Interview Scheduled
                     </span>
-                    <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 4px;">{{ application.job.title }}</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        <i class="fas fa-building"></i> {{ application.job.department|default:"Company" }}
-                        <span style="margin: 0 8px;">|</span>
-                        <i class="fas fa-map-marker-alt"></i> {{ application.job.location|default:"Remote" }}
+                    <h2 class="job-title">{{ application.job.title }}</h2>
+                    <p class="job-meta">
+                        <i class="fas fa-building"></i>
+                        {{ application.job.department|default:"Company" }}
+                        <span class="job-meta-separator">|</span>
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ application.job.location|default:"Remote" }}
                     </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Interview Details Card -->
-    <div class="card fade-in-up" style="margin-bottom: 20px;">
+    <!-- Interview Schedule Card -->
+    <div class="card interview-schedule-card">
         <div class="card-header">
             <h3><i class="fas fa-clock"></i> Interview Schedule</h3>
         </div>
         <div class="card-body">
-            <div class="interview-datetime-display" style="text-align: center; padding: 24px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 24px;">
-                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
-                    Scheduled For
-                </div>
-                <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">
+            <div class="interview-datetime">
+                <div class="interview-datetime-label">Scheduled For</div>
+                <div class="interview-datetime-date">
                     {{ application.interview_scheduled_at|date:"l, F d, Y" }}
                 </div>
-                <div style="font-size: 1.5rem; color: var(--accent-primary); font-weight: 600;">
+                <div class="interview-datetime-time">
                     {{ application.interview_scheduled_at|time:"g:i A" }}
                 </div>
             </div>
-            
+
             <!-- Meeting Link Section -->
-            <div style="background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+            <div class="meeting-section">
+                <div class="meeting-platform-row">
                     {% if application.interview_platform %}
-                    <span class="platform-badge platform-{{ application.interview_platform|lower|cut:' ' }}" style="font-size: 0.9rem; padding: 8px 16px;">
+                    <span class="platform-badge platform-{{ application.interview_platform|lower|cut:' ' }}">
                         <i class="fas fa-video"></i> {{ application.interview_platform }}
                     </span>
                     {% else %}
-                    <span class="platform-badge" style="font-size: 0.9rem; padding: 8px 16px;">
+                    <span class="platform-badge">
                         <i class="fas fa-video"></i> Video Call
                     </span>
                     {% endif %}
                 </div>
-                
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                    <a href="{{ application.interview_meeting_link }}" target="_blank" rel="noopener noreferrer" 
-                        class="btn btn-primary" style="flex: 1; min-width: 200px; justify-content: center;">
+
+                <div class="meeting-actions">
+                    <a href="{{ application.interview_meeting_link }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn-join">
                         <i class="fas fa-external-link-alt"></i> Join Meeting
                     </a>
-                    <button type="button" class="btn btn-secondary copy-link-btn" 
-                        data-link="{{ application.interview_meeting_link }}" style="flex-shrink: 0;">
+                    <button type="button"
+                            class="btn-copy"
+                            data-link="{{ application.interview_meeting_link }}">
                         <i class="fas fa-copy"></i> Copy Link
                     </button>
                 </div>
-                
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; text-align: center;">
+
+                <p class="meeting-helper-text">
+                    <i class="fas fa-info-circle"></i>
                     Click "Join Meeting" at the scheduled time to connect with the interviewer
                 </p>
             </div>
@@ -78,55 +87,60 @@
 
     {% if application.interview_notes %}
     <!-- Interview Instructions Card -->
-    <div class="card fade-in-up" style="margin-bottom: 20px;">
+    <div class="card interview-instructions-card">
         <div class="card-header">
             <h3><i class="fas fa-info-circle"></i> Interview Instructions</h3>
         </div>
         <div class="card-body">
-            <div style="color: var(--text-secondary); line-height: 1.7; white-space: pre-line;">{{ application.interview_notes }}</div>
+            <div class="interview-instructions-text">{{ application.interview_notes }}</div>
         </div>
     </div>
     {% endif %}
 
     <!-- Preparation Tips Card -->
-    <div class="card fade-in-up" style="border-left: 3px solid var(--accent-yellow);">
+    <div class="card interview-tips-card">
         <div class="card-header">
-            <h3><i class="fas fa-lightbulb" style="color: var(--accent-yellow);"></i> Preparation Tips</h3>
+            <h3><i class="fas fa-lightbulb"></i> Preparation Tips</h3>
         </div>
         <div class="card-body">
-            <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary);">
-                <li style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-green); margin-top: 3px;"></i>
+            <ul class="tips-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
                     <span>Test your camera, microphone, and internet connection before the interview</span>
                 </li>
-                <li style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-green); margin-top: 3px;"></i>
+                <li>
+                    <i class="fas fa-check-circle"></i>
                     <span>Join 5 minutes early to ensure everything is working properly</span>
                 </li>
-                <li style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-green); margin-top: 3px;"></i>
+                <li>
+                    <i class="fas fa-check-circle"></i>
                     <span>Find a quiet, well-lit space with a professional background</span>
                 </li>
-                <li style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-green); margin-top: 3px;"></i>
+                <li>
+                    <i class="fas fa-check-circle"></i>
                     <span>Have your resume and the job description ready for reference</span>
                 </li>
-                <li style="display: flex; align-items: flex-start; gap: 12px;">
-                    <i class="fas fa-check-circle" style="color: var(--accent-green); margin-top: 3px;"></i>
+                <li>
+                    <i class="fas fa-check-circle"></i>
                     <span>Prepare questions to ask about the role and company</span>
                 </li>
             </ul>
         </div>
     </div>
 
-    <!-- Back Button -->
-    <div style="margin-top: 24px;">
+    <!-- Back Navigation -->
+    <div class="interview-back-nav">
         <a href="{% url 'applications:my_applications' %}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to My Applications
         </a>
     </div>
+
 </div>
 
 <!-- Toast notification container -->
-<div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999;"></div>
+<div id="toast-container"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/interview.js' %}"></script>
 {% endblock %}

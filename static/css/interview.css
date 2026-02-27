@@ -1,0 +1,396 @@
+/* ============================================
+   Interview Detail Page — Premium Dark Theme
+   ============================================ */
+
+/* Page Container */
+.interview-page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 8px 0 48px;
+}
+
+/* ============================================
+   Header Card
+   ============================================ */
+.interview-header {
+    position: relative;
+    overflow: visible;
+    margin-bottom: 24px;
+}
+
+.interview-header .card-body {
+    padding: 28px 28px 24px;
+}
+
+.interview-header-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-purple), var(--accent-cyan));
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.interview-header-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-top: 4px;
+}
+
+.interview-header .status-badge {
+    margin-bottom: 12px;
+    display: inline-flex;
+    font-size: 0.78rem;
+}
+
+.interview-header .job-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.interview-header .job-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    flex-wrap: wrap;
+}
+
+.interview-header .job-meta i {
+    font-size: 0.8rem;
+    width: 16px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.interview-header .job-meta-separator {
+    margin: 0 6px;
+    color: var(--border-color);
+}
+
+/* ============================================
+   Schedule Card
+   ============================================ */
+.interview-schedule-card {
+    margin-bottom: 24px;
+}
+
+.interview-schedule-card .card-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.interview-schedule-card .card-header h3 i {
+    color: var(--accent-primary);
+}
+
+/* Datetime Display */
+.interview-datetime {
+    text-align: center;
+    padding: 32px 24px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 28px;
+}
+
+.interview-datetime-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.interview-datetime-date {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.interview-datetime-time {
+    font-size: 1.35rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================================
+   Meeting Section
+   ============================================ */
+.meeting-section {
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    transition: border-color var(--transition-normal);
+}
+
+.meeting-section:hover {
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.meeting-platform-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.meeting-platform-row .platform-badge {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+.meeting-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.meeting-actions .btn-join {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.925rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.meeting-actions .btn-join:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+    color: white;
+}
+
+.meeting-actions .btn-join:active {
+    transform: translateY(0);
+}
+
+.meeting-actions .btn-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    flex-shrink: 0;
+}
+
+.meeting-actions .btn-copy:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    background: rgba(99, 102, 241, 0.06);
+}
+
+.meeting-actions .btn-copy.copied {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+    background: rgba(16, 185, 129, 0.06);
+}
+
+.meeting-helper-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 16px;
+    text-align: center;
+}
+
+.meeting-helper-text i {
+    margin-right: 4px;
+}
+
+/* ============================================
+   Instructions Card
+   ============================================ */
+.interview-instructions-card {
+    margin-bottom: 24px;
+}
+
+.interview-instructions-card .card-header h3 i {
+    color: var(--accent-blue);
+}
+
+.interview-instructions-text {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    white-space: pre-line;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   Preparation Tips Card
+   ============================================ */
+.interview-tips-card {
+    margin-bottom: 32px;
+    border-left: 3px solid var(--accent-yellow);
+}
+
+.interview-tips-card .card-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.interview-tips-card .card-header h3 i {
+    color: var(--accent-yellow);
+}
+
+.tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tips-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.tips-list li + li {
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.tips-list li i {
+    color: var(--accent-green);
+    margin-top: 4px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   Back Navigation
+   ============================================ */
+.interview-back-nav {
+    padding-top: 8px;
+}
+
+.interview-back-nav .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+.interview-page .card {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: interviewCardIn 0.5s ease-out forwards;
+}
+
+.interview-page .card:nth-child(1) { animation-delay: 0.05s; }
+.interview-page .card:nth-child(2) { animation-delay: 0.12s; }
+.interview-page .card:nth-child(3) { animation-delay: 0.19s; }
+.interview-page .card:nth-child(4) { animation-delay: 0.26s; }
+
+@keyframes interviewCardIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   Toast Container (scoped override)
+   ============================================ */
+#toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    .interview-page {
+        padding: 0 0 32px;
+    }
+
+    .interview-header .card-body {
+        padding: 24px 20px 20px;
+    }
+
+    .interview-header .job-title {
+        font-size: 1.25rem;
+    }
+
+    .interview-header .job-meta {
+        font-size: 0.8rem;
+    }
+
+    .interview-datetime {
+        padding: 24px 16px;
+    }
+
+    .interview-datetime-date {
+        font-size: 1.35rem;
+    }
+
+    .interview-datetime-time {
+        font-size: 1.15rem;
+    }
+
+    .meeting-section {
+        padding: 20px 16px;
+    }
+
+    .meeting-actions {
+        flex-direction: column;
+    }
+
+    .meeting-actions .btn-join,
+    .meeting-actions .btn-copy {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tips-list li {
+        gap: 10px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .interview-page {
+        max-width: 90%;
+    }
+}

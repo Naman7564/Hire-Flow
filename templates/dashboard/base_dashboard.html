@@ -72,7 +72,7 @@
                 Browse Jobs
             </a>
             <a href="{% url 'applications:my_applications' %}"
-                class="{% if 'applications/my' in request.path %}active{% endif %}">
+                class="{% if 'applications/my' in request.path or 'my-interview' in request.path %}active{% endif %}">
                 <span class="icon"><i class="fas fa-file-alt"></i></span>
                 My Applications
             </a>
