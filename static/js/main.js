@@ -440,10 +440,16 @@ function sendInterviewNotification(appId, candidateName, button) {
 }
 
 /**
- * Get CSRF token from cookie or meta tag
+ * Get CSRF token from cookie or hidden input
  */
 function getCsrfToken() {
-    // Try to get from cookie first
+    // Try hidden input first (from {% csrf_token %} tag)
+    const csrfInput = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (csrfInput) {
+        return csrfInput.value;
+    }
+    
+    // Fallback to cookie
     const cookieValue = document.cookie
         .split('; ')
         .find(row => row.startsWith('csrftoken='));
@@ -452,9 +458,7 @@ function getCsrfToken() {
         return cookieValue.split('=')[1];
     }
     
-    // Fallback to hidden input
-    const csrfInput = document.querySelector('[name=csrfmiddlewaretoken]');
-    return csrfInput ? csrfInput.value : '';
+    return '';
 }
 
 /**

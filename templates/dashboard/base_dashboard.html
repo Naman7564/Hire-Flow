@@ -76,6 +76,11 @@
                 <span class="icon"><i class="fas fa-file-alt"></i></span>
                 My Applications
             </a>
+            <a href="{% url 'applications:notifications' %}"
+                class="{% if 'notifications' in request.path %}active{% endif %}">
+                <span class="icon"><i class="fas fa-bell"></i></span>
+                Notifications
+            </a>
 
             <div class="nav-label">Account</div>
             <a href="{% url 'accounts:profile' %}"

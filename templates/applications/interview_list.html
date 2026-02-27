@@ -153,6 +153,9 @@
     </div>
 </div>
 
+<!-- Hidden CSRF token for AJAX requests -->
+{% csrf_token %}
+
 <!-- Toast notification container -->
 <div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999;"></div>
 {% endblock %}

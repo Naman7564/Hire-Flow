@@ -48,9 +48,16 @@
                         <td><span class="status-badge {{ app.status }}">{{ app.get_status_display }}</span></td>
                         <td>{{ app.applied_at|date:"M d, Y" }}</td>
                         <td>
-                            <a href="{% url 'jobs:detail' app.job.pk %}" class="btn btn-sm btn-secondary">
-                                <i class="fas fa-eye"></i> View
-                            </a>
+                            <div class="btn-group">
+                                <a href="{% url 'jobs:detail' app.job.pk %}" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                {% if app.interview_scheduled_at %}
+                                <a href="{% url 'applications:my_interview' app.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-video"></i> Interview
+                                </a>
+                                {% endif %}
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
